@@ -1,0 +1,56 @@
+/*	Stile per Copertina Articolo	*/
+#uploadPreview {
+    background-position: center center;
+    background-size: contain;
+    width: 100%;
+}
+
+/*	Stile per Textarea Articolo	*/
+.editor {
+    min-height: 200px;
+    resize: none;
+    text-align: justify;
+    white-space: normal;
+    -moz-text-align-last: left;
+    text-align-last: left;
+}
+
+
+
+/*	Stile Box Profilo e Elementi	*/
+.image-pavatar {
+  opacity: 1;
+  height: auto;
+  transition: .5s ease;
+  backface-visibility: hidden;
+}
+
+.middle-pavatar {
+  transition: .5s ease;
+  opacity: 0;
+  position: absolute;
+  top: 30%;
+  left: 48%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%)
+}
+
+.author-container:hover .image-pavatar {
+  opacity: 0.3;
+}
+
+.author-container:hover .middle-pavatar {
+  opacity: 1;
+}
+
+.text-pavatar {
+  color: white;
+  font-size: 16px;
+  padding: 32px 32px;
+}
+
+#uploadImageForm {
+	display: none;
+}
+
+

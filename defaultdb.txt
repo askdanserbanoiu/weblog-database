@@ -1,0 +1,186 @@
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS belonging;
+DROP TABLE IF EXISTS subjects;
+DROP TABLE IF EXISTS images;
+DROP TABLE IF EXISTS articles;
+DROP TABLE IF EXISTS comments;
+DROP TABLE IF EXISTS queries;
+
+CREATE TABLE users (
+	username VARCHAR(50) NOT NULL,
+	hashed_password VARCHAR(60) NOT NULL,
+	name VARCHAR(50) NOT NULL,
+	surname VARCHAR(50) NOT NULL,
+	birth VARCHAR(50) NOT NULL,
+	address VARCHAR(50) NOT NULL,
+	user_img_id VARCHAR(20) NOT NULL,
+	permission VARCHAR(20) NOT NULL,
+	PRIMARY KEY(username)
+) ENGINE=InnoDB;
+	
+CREATE TABLE articles (
+ 	
+	title VARCHAR(60) NOT NULL PRIMARY KEY,
+	article_img_id INT(11) references images(id),
+	body TEXT NOT NULL,
+	author VARCHAR(40) NOT NULL references users(username),
+	created DATETIME NOT NULL
+) ENGINE=InnoDB;
+
+CREATE TABLE subjects (
+	subject VARCHAR(30) NOT NULL PRIMARY KEY,
+	description TEXT NOT NULL
+) ENGINE=InnoDB;
+
+CREATE TABLE belonging (
+       article_id VARCHAR(60) NOT NULL references articles(title),
+       subject VARCHAR(40) NOT NULL references subjects(subject),
+       PRIMARY KEY(article_id, subject)      
+) ENGINE=InnoDB;
+
+CREATE TABLE images (
+	id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	filename VARCHAR(60) NOT NULL,
+	type VARCHAR(40) NOT NULL
+) ENGINE=InnoDB;
+
+CREATE TABLE comments (
+	id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	author VARCHAR(255) NOT NULL,
+	article_id VARCHAR(60) NOT NULL references articles(title),
+	created DATETIME NOT NULL,
+	body TEXT NOT NULL
+) ENGINE=InnoDB;
+
+create table queries (
+       id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+       name ENUM('create_article', 'view_article', 'comment_article', 'login', 'new_user', 'delete_user') NOT NULL,
+       created DATE NOT NULL
+) ENGINE=InnoDB;
+
+INSERT INTO users (username, hashed_password, name, surname, birth, address, user_img_id, permission) VALUES
+                  ("danserbanoiu", "1a1dc91c907325c69271ddf0c944bc72", "Dan", "Serbanoiu", "1992/10/03", "A. Gasperi 3", 1, "root"),
+		  ("elisabellini", "1a1dc91c907325c69271ddf0c944bc72", "Elisa", "Bellini", "1986/10/10", "Wonderland", 2, "admin"),
+		  ("mikelandon", "1a1dc91c907325c69271ddf0c944bc72", "Mike", "London", "1980/11/09", "Neverland", 3, "admin");
+
+INSERT INTO articles (title, article_img_id, body, author, created) VALUES
+            ("La Dieta Vegana", 4, "Le diete vegane escludono dall'alimentazione la carne di qualsiasi animale e tutti i prodotti di origine animale e quindi rientrano, come casi particolari, nelle diete vegetariane. Oltre alla dieta vegana classica, basata su cereali, legumi, verdura e frutta e tipicamente adottata come pratica alimentare nel veganismo etico, si possono considerare diete vegane anche altre diete che, sebbene differiscano sostanzialmente da una dieta vegana classica sia nei principi alimentari sia nel tipo di alimenti consumati, non comprendono il consumo di alcun ingrediente di origine animale, quali quelle praticate, ad esempio, nel crudismo vegano, nel fruttarismo o nell'ehretismo", "danserbanoiu", "2017-01-01 07:00:00"),
+   		    ("I Benefici del Digiuno", 5, "Quando ci si astiene dal cibo per 24 ore nel cervello si formano nuovi neuroni e mangiare poco sarebbe un toccasana per chi ha problemi di cuore. Siamo stati cacciatori e così si mangiava quando capitava, due o tre volte la settimana e nemmeno sempre. Un tempo procurarsi il cibo per l'uomo era così difficile che occorreva aguzzare l'ingegno e chissà che le nostre capacità cognitive non si siano evolute proprio da allora. Per prevalere sugli animali poi era importante per gli uomini poter comunicare tra loro, insomma serviva un linguaggio e l'abbiamo inventato. Quelli che riuscivano a procurarsi il cibo mangiavano comunque soltanto di giorno poi col calare del sole più nulla fino all'alba. Sono almeno 12 ore di digiuno. Con la luce artificiale è cambiato tutto si mangia sempre fino a tardi e c'è persino chi si alza di notte per mangiare ma l'uomo non è fatto per mangiare quattro volte al giorno. Siamo stati progettati per farlo quando capita e i nostri geni sono ancora quelli di allora. Del resto, se non fosse così perché dovremmo avere ancora oggi organi capaci di conservare energia per poi renderla disponibile quando serve? Le riserve di zucchero che si accumulano nel fegato sotto forma di glicogeno dopo 10-12 ore di digiuno tendono però a esaurirsi. Questo richiama acidi grassi dal tessuto adiposo, il fegato li trasforma in chetoni che tornano nel sangue e raggiungono muscoli e cervello per essere fonte di energia.", "danserbanoiu", "2017-01-02 07:00:00" ),
+		    ("Uscita Nuovo iPhone", 6, "Il nuovo Super Retina Display è bellissimo e piace subito, fin dal primo utilizzo, mentre nel caso del Face ID, che permette di sbloccare il telefono tramite il riconoscimento del volto, i benefici reali si vedranno con l'uso prolungato. In puro stile Apple, non si tratta di una funzionalità fine a sé stessa, ma di una caratteristiche che si offre a più applicazioni. Il riconoscimento del volto rende possibili le nuove Animoji, che portano la messaggistica ad un livello ancora più alto di interazione. Sono tutte esperienze con cui Apple crea una connessione ancora più stretta tra me, l'utente, e l'iPhone, sui cui tutto avviene come per magia grazie al Machine Learning e all'Intelligenza Artificiale. Il mercato ha espresso preoccupazione sulla data di lancio del 3 novembre, un notevole ritardo rispetto alla data di lancio di iPhone 8 e 8 Plus. Tuttavia nei paesi chiave in cui le vendite di iPhone X conteranno di più, Apple ha una presenza commerciale forte, che le permetterà di essere pronta per il periodo natalizio. A differenza dei suoi concorrenti, Apple non deve fare i conti con l'allocazione di spazio presso rivenditori chiave durante il periodo autunnale. L'online e le Apple Town Square (il nome con cui ora l'azienda chiama i suoi Store) sono responsabili per la maggior parte delle vendite, e sarà così anche nel caso dell'iPhone X. Non mi preoccupa neppure la possibilità che gli utenti preferiscano comprare un iPhone 8 anziché attendere il modello X: entrambe le opzioni vanno a favore di Apple. Quanto al prezzo di iPhone X, il problema non si pone in tutti quei mercati dove sono disponibili piani di rateizzazione, perché i clienti vedranno solo un piccolo aumento nella rata mensile.", "mikelandon", "2016-12-31 07:00:00"),
+		    ("Naturopatia", 7, "La naturopatia o medicina naturopatica è un insieme di pratiche di medicina alternativa, i cui fondamenti teorici furono raccolti da principi salutistici di diversa provenienza, forse formulati alla fine del XIX secolo negli Stati Uniti per poi diffondersi, in diverse forme, nel resto del mondo, senza però mai riuscire a dare vita a una medicina autonoma, univocamente e coerentemente definita. Essa dichiara di avere come obiettivo la stimolazione della capacità innata di autoguarigione o di ritorno all'equilibrio del corpo umano, denominata omeostasi, attraverso l'uso di tecniche e di rimedi di diversa natura, oppure attraverso l'adozione di stili di vita sani e in armonia con i ritmi naturali. Le pratiche naturopatiche possono essere molto varie: massaggi, riflessologia plantare, idroterapia, cromopuntura/cromoterapia, floriterapia, climatoterapia, aromaterapia e molte altre.La medicina scientifica è critica riguardo alla medicina naturopatica, perché i mezzi utilizzati dalla medicina alternativa non sono fondati scientificamente, si basano su costrutti teorici non dimostrati; inoltre, i suoi presunti risultati clinici non reggono solitamente alla verifica clinica in studi controllati, e molti dei suoi esponenti usano in maniera fuorviante e suggestiva termini scientifici che hanno in realtà significati molto diversi.", "elisabellini", "2016-12-31 07:00:00"),
+		   ("Il Futuro Della Scienza", 8, "Venezia – Tre giorni intensi nel capoluogo veneto hanno cercato di fare un po' di ordine sull'uso della rete e dei suoi scopi primari legati alla scienza, ma soprattutto verso quali direzioni si sta andando. Tante menti per discutere alla conferenza The future of science su quali possano essere i futuri passi da compiere, in collaborazione con Fondazione Veronesi, Fondazione Giorgio Cini e Fondazione Silvio Tronchetti Provera. Si parte però da lontano, con Alessandro Curioni (vice presidente europeo e direttore di Ibm Research) che sottolinea quanto sia importante la ricerca e su quanto poco si investa per analizzare i dati. Tutto quello che non viene analizzato, viene perso e buttato via. L'aumento di pubblicazioni scientifiche necessita a sua volta uno sforzo maggiore per comprenderle e metterle in rapporto tra di loro. Inoltre illustra quanto si sia ormai, da più di cinque anni, entrati nella terza era informatica, quella del cognitive computing, era iniziata nel 2011. È l'epoca in cui queste macchine apprendono automaticamente, ragionano in autonomia, elaborano un linguaggio naturale, conversano, interagiscono con l'uomo e dialogano. La macchina non sostituirà più l'uomo, ma lo affiancherà è la frase che riassume questo terzo fondamentale passaggio informatico.", "danserbanoiu", "2016-12-31 07:00:00"),
+		   ("Alimenti con Omega 3", 9, "Tra i vari lipidi di interesse nutrizionale, due meritano particolare attenzione. Si tratta di due acidi grassi polinsaturi, rispettivamente chiamati acido linoleico o LA (18:2) e acido alfa linolenico o ALA (18:3).Questi acidi grassi sono definiti essenziali (o AGE), poiché - considerata l'impossibilità dell'organismo di sintetizzarli autonomamente - devono essere necessariamente introdotti con la dieta. Omega 3 Pesce IntegratoriUna volta assunti attraverso gli alimenti, questi due nutrienti sono convertiti per via enzimatica in altri acidi grassi polinsaturi (PUFA), detti semi-essenziali e aventi funzioni metaboliche specifiche. In particolare, l'acido linoleico è il capostipite degli acidi grassi della serie omega 6, mentre a partire dall'acido alfa linolenico si ottengono gli analoghi della serie omega 3. Queste vie metaboliche prevedono l'intervento di due complessi enzimatici, capaci di allungare la catena carboniosa (elongasi) e di aumentare il numero di doppi legami (desaturasi). Grazie a questi interventi enzimatici si formano le rispettive serie di acidi grassi, appartenenti alla serie omega 6, se derivano dall'acido linoleico, e alla serie omega 3, se originano dall'acido alfa-linolenico.", "mikelandon", "2016-11-31 07:00:00"),
+		   ("MySQL", 10, "MySQL o Oracle MySQL è un Relational database management system (RDBMS) composto da un client a riga di comando e un server. Entrambi i software sono disponibili sia per sistemi Unix e Unix-like che per Windows; le piattaforme principali di riferimento sono Linux e Oracle Solaris.MySQL è un software libero rilasciato a doppia licenza, compresa la GNU General Public License ed è sviluppato per essere il più possibile conforme agli standard ANSI SQL e ODBC SQL. I sistemi e i linguaggi di programmazione che supportano MySQL sono molto numerosi: ODBC, Java, Mono, .NET, PHP, Python e molti altri. Le piattaforme LAMP e WAMP incorporano MySQL per l'implementazione di server per gestire siti web dinamici, inoltre molti dei Content Management System di successo come WordPress, Joomla e Drupal nascono proprio con il supporto predefinito a MySQL", "danserbanoiu", "2016-11-21 07:00:00"),
+		   ("Java", 11, "In informatica Java è un linguaggio di programmazione ad alto livello, orientato agli oggetti e a tipizzazione statica, specificatamente progettato per essere il più possibile indipendente dalla piattaforma di esecuzione. Java è stato creato a partire da ricerche effettuate alla Stanford University agli inizi degli anni novanta. Nel 1992 nasce il linguaggio Oak (in italiano quercia), prodotto da Sun Microsystems e realizzato da un gruppo di esperti sviluppatori capitanati da James Gosling. Tale nome fu successivamente cambiato in Java per problemi di copyright (il linguaggio di programmazione Oak esisteva già). Per facilitare il passaggio a Java ai programmatori old-fashioned, legati in particolare a linguaggi come il C++, la sintassi di base (strutture di controllo, operatori e così via) è stata mantenuta pressoché identica a quella del C++; 					 tuttavia, non sono state introdotte caratteristiche ritenute fonti di una complessità non necessaria a livello di linguaggio e che favoriscono l'introduzione di determinati bug durante la programmazione, come l'aritmetica dei puntatori, l'ereditarietà multipla delle classi, e l'istruzione goto. Per le caratteristiche orientate agli oggetti del linguaggio ci si è ispirati al C++ e soprattutto all'Objective C.", "danserbanoiu", "2015-10-26 07:00:00"),
+ 		   ("Benefici del Ballo", 12, "La danza è un'ottima attività per chi è a rischio di malattie cardiovascolari. Uno studio italiano ha dimostrato che le persone con 	insufficienza cardiaca che praticano il ballo come attività fisica migliorano la salute del loro cuore, della respirazione e la qualità della vita in modo significativo rispetto a chi, per esempio, va in bicicletta o usa il tapis roulant per fare esercizio. Perdere peso è un altro dei benefici del ballo, se praticato con costanza. Uno studio pubblicato sul Journal of Physiological Anthropology dichiara che un programma di danza di tipo aerobico permette di perdere peso e di aumentare la potenza aerobica alla pari del ciclismo e dello jogging. Vi sentite tutto il giorno senza forze? Ballare potrebbe aiutarvi a recuperarle. Secondo una ricerca pubblicata sul The Scholarly Publishing and Academic Resources Coalition, un programma settimanale di ballo può migliorare il rendimento fisico ed aumentare i livelli d'energia negli adulti. Ballare a volte richiede una grande quantità di flessibilità. La maggior parte delle lezioni di danza inizia con un riscaldamento che include diversi esercizi di stiramento. Quando si balla, bisogna sforzarsi per aumentare la capacità di movimento di tutti i gruppi muscolari.", "elisabellini", "2016-10-31 07:00:00"),
+		   ("You Tube", 13, "YouTube è una piattaforma web, fondata il 14 febbraio 2005, che consente la condivisione e visualizzazione in rete di video (video sharing). Gli utenti possono anche votare e commentare i video. Sul sito è possibile vedere videoclip, trailer, video divertenti, notizie, slideshow e altro ancora. Nel novembre 2006 è stato acquistato dall'azienda statunitense Google per circa 1,7 miliardi di dollari. Attualmente secondo Alexa, è il secondo sito web più visitato al mondo, alle spalle solamente di Google.[2] L'azienda ha sede a San Bruno, in California, ed utilizza i tag standard di HTML5 nelle nuove versioni dei browser (Adobe Flash Video in quelle più vecchie) per visualizzare una vasta gamma di video dai singoli utenti, anche se le società dei media (CBS, BBC, Rai, Vevo) ed altre organizzazioni offrono parte del loro materiale tramite il sito, come sottoscritto nel programma di partenariato di YouTube; il partenariato, inoltre, permette agli utenti con un margine di utenza elevato di ottenere una ricompensa in denaro in cambio della sponsorizzazione.", "elisabellini", "2016-09-13 10:00:00");
+
+
+INSERT INTO belonging (article_id, subject) VALUES
+		("La Dieta Vegana", "Veganismo"),
+		("La Dieta Vegana", "Alimentazione"),
+		("I Benefici del Digiuno", "Alimentazione"),
+		("Uscita Nuovo iPhone", "Tecnologia"),
+		("Naturopatia", "Alimentazione"),
+		("Il Futuro Della Scienza", "Tecnologia"),
+		("Alimenti Contenenti Omega 3", "Alimentazione"),
+		("MySQL", "Tecnologia"),
+		("Java", "Tecnologia"),
+		("Benefici del Ballo", "Guida"),
+		("You Tube", "Tecnologia");
+
+	
+
+
+INSERT INTO images (id, filename, type) VALUES
+          (1, "VJZCR2R1G0TMW980XJPP.jpg", "image/jpeg"),
+		  (2, "C2C4NK400B0SCSMBHX03.jpg", "image/jpeg"),
+		  (3, "MEZV4KAJY1E42FX4X6SK.jpg", "image/jpeg"),
+          (4, "IUDHJPSODQR9HMNAKZKE.jpg", "image/jpeg"),
+          (5, "K1JQ8RKD7Q9LUJIP7DXL.jpg", "image/jpeg"),
+		  (6, "RPF82M7EXMBQ8IY4JIWB.jpg", "image/jpeg"),
+		  (7, "L1MDYOHK0RI3FUVTCU65.jpg", "image/jpeg"),
+		  (8, "DCADA48JWQ8CH3GEFI4M.jpg", "image/jpeg"),
+          (9, "YTR9BSEDLEAUUWE9I9VU.jpg", "image/jpeg"),
+          (10, "8Y1RHT1SHC1VNS5DL7R9.jpg", "image/jpeg"),
+          (11, "10SS63JR4VK7II4RJIWP.jpg", "image/jpeg"),
+          (12, "YWXKUEG1FP1KYAR2FZVN.jpg", "image/jpeg"),
+          (13, "L102N1WLTY9NDGOYH0TW.jpg", "image/jpeg");
+
+
+
+
+INSERT INTO subjects (subject, description) VALUES
+  ("Tecnologia", "Ampio settore di ricerca, nel quale sono coinvolte varie discipline tecniche e scientifiche, che studia l'applicazione e l'uso di tutto ciò che può essere funzionale alla soluzione di problemi pratici, all'ottimizzazione delle procedure, alla scelta di strategie operative per raggiungere un determinato obiettivo; in senso più restrittivo, lo studio delle scienze applicate con particolare riferimento ai processi industriali di trasformazione."),
+  ("Veganismo", "Un movimento animalista che propone l'adozione di uno stile di vita proprio di una società basata idealmente su risorse non provenienti dal mondo animale."),
+  ("Alimentazione", "L'insieme dei processi biologici che consentono, o che condizionano, la sopravvivenza, la crescita, lo sviluppo e l'integrità di un organismo vivente, di tutti i regni (animali, vegetali, funghi, batteri, archeobatteri, protisti), sulla base della disponibilità di energia e di nutrienti."),
+  ("Guida", "Un'opera che compendia gli aspetti essenziali di una determinata disciplina o di un argomento, generalmente in funzione delle esigenze divulgative o didattiche del pubblico al quale è destinata");
+
+
+
+
+
+
+DROP FUNCTION IF EXISTS adduser;
+DELIMITER |
+CREATE FUNCTION adduser(username CHAR(30), hashed_password CHAR(60), name CHAR(20), surname CHAR(20), birth date, address CHAR(30), user_img_id INT, permission ENUM('root', 'admin')) RETURNS BOOL
+BEGIN
+DECLARE n_users INT;
+DECLARE ok BOOL;
+SELECT COUNT(*) INTO n_users FROM users;
+IF(n_users < 10) THEN
+INSERT INTO users (username, hashed_password, name, surname, birth, address, user_img_id, permission) VALUES
+(username, hashed_password, name, surname, birth, address, user_img_id, permission);
+SET ok = 1;
+ELSE
+SET ok = 0;
+END IF;
+RETURN ok;
+END |
+DELIMITER ;
+
+DROP FUNCTION IF EXISTS deletesubject;
+DELIMITER |
+CREATE FUNCTION deletesubject(sub CHAR(30)) RETURNS BOOL
+BEGIN
+DECLARE n_used INT;
+DECLARE ok BOOL;
+SELECT COUNT(*) INTO n_used from belonging as B where B.subject = sub;
+IF(n_used > 0) THEN
+SET ok = 0;
+ELSE
+DELETE FROM subjects WHERE subject=sub LIMIT 1;
+SET ok = 1;
+END IF;
+RETURN ok;
+END |
+DELIMITER ;
+
+
+DROP TRIGGER IF EXISTS update_queries_new_user;
+DELIMITER |
+CREATE TRIGGER update_queries_new_user
+AFTER INSERT ON users
+FOR EACH ROW
+BEGIN
+INSERT INTO queries(name, created) VALUES ('new_user', CURDATE());
+END |
+DELIMITER ;
+
+
+DROP TRIGGER IF EXISTS update_queries_delete_user;
+DELIMITER |
+CREATE TRIGGER update_queries_delete_user
+AFTER DELETE ON users
+FOR EACH ROW
+BEGIN
+IF (SELECT count(*) as n_articles from articles where author=old.username) > 0 THEN
+INSERT INTO queries(name, created) VALUES ('delete_user', CURDATE());
+END IF;
+END |
+DELIMITER ;
+       
+
+
+
+	
