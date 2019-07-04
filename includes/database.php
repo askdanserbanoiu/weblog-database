@@ -4,10 +4,10 @@ if (!defined('DB_NAME')) {define("DB_NAME", "weblogdb");}
 if (!defined('DB_USER')) {define("DB_USER", "dan");}
 if (!defined('DB_PASS')) {define("DB_PASS", "pass");}*/
 
-if (!defined('DB_HOST')) {define("DB_HOST", "zpj83vpaccjer3ah.chr7pe7iynqr.eu-west-1.rds.amazonaws.com");}
-if (!defined('DB_NAME')) {define("DB_NAME", "vjx9vya0nacmlynb");}
-if (!defined('DB_USER')) {define("DB_USER", "ctmublo9fhhfakkp");}
-if (!defined('DB_PASS')) {define("DB_PASS", "lxtw3g8ksosccd1u");}
+if (!defined('DB_HOST')) {define("DB_HOST", "uf63wl4z2daq9dbb.chr7pe7iynqr.eu-west-1.rds.amazonaws.com");}
+if (!defined('DB_NAME')) {define("DB_NAME", "pohv8my3aodcjmga");}
+if (!defined('DB_USER')) {define("DB_USER", "axet62f7yp9vthny");}
+if (!defined('DB_PASS')) {define("DB_PASS", "aldzxm2o0m8z91e9");}
 
 class Database {
 	private $dbconn; 
